@@ -1,26 +1,26 @@
-package com.leticia.helpDesk.domain;
+package com.leticia.helpDesk.domain.enums;
 
 import lombok.Getter;
 
 @Getter
-public enum Status {
+public enum Perfil {
 
-    ABERTO(0, "ABERTO"), ANDAMENTO(1, "ANDAMENTO"), ENCERRADO(2, "ENCERRADO");
+    ADMIN(0, "ROLE_ADMIN"), CLIENTE(1, "ROLE_CLIENTE"), TECNICO(2, "ROLE_TECNICO");
 
     private Integer codigo;
     private String descricao;
 
-    private Status(Integer codigo, String descricao) {
+    private Perfil(Integer codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }
 
-    public static Status toEnum(Integer cod) {
+    public static Perfil toEnum(Integer cod) {
         if (cod == null) {
             return null;
         }
 
-        for (Status x : Status.values()) {
+        for (Perfil x : Perfil.values()) {
             if (cod.equals(x.getCodigo())) {
                 return x;
             }

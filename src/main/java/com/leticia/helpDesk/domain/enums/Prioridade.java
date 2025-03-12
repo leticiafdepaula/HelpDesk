@@ -1,4 +1,4 @@
- package com.leticia.helpDesk.domain;
+ package com.leticia.helpDesk.domain.enums;
 
 import lombok.Getter;
 
