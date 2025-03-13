@@ -3,14 +3,9 @@ package com.leticia.helpDesk.domain;
 import com.leticia.helpDesk.domain.enums.Perfil;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
 public class Tecnico extends Pessoa {
 
@@ -21,10 +16,15 @@ public class Tecnico extends Pessoa {
         super();
         addPerfil(Perfil.CLIENTE);
     }
-
-    public Tecnico(Integer id, String senha, String email, String cpf, String nome, List<Chamado> chamados) {
+    public Tecnico(Integer id, String nome, String cpf, String email, String senha) {
         super(id, senha, email, cpf, nome);
+    }
+
+    public List<Chamado> getChamados() {
+        return chamados;
+    }
+
+    public void setChamados(List<Chamado> chamados) {
         this.chamados = chamados;
-        addPerfil(Perfil.CLIENTE);
     }
 }

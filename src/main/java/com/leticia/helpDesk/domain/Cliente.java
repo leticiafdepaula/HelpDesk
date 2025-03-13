@@ -9,8 +9,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+
 @Entity
 public class Cliente extends Pessoa{
  private static final long serialVersionUID = 1L;
@@ -23,9 +22,17 @@ public class Cliente extends Pessoa{
        addPerfil(Perfil.CLIENTE);
    }
 
-    public Cliente(Integer id, String senha, String email, String cpf, String nome, List<Chamado> chamados) {
+    public Cliente(Integer id, String senha, String email, String cpf, String nome) {
         super(id, senha, email, cpf, nome);
         addPerfil(Perfil.CLIENTE);
+
+    }
+
+    public List<Chamado> getChamados() {
+        return chamados;
+    }
+
+    public void setChamados(List<Chamado> chamados) {
         this.chamados = chamados;
     }
 }
