@@ -10,7 +10,9 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().anyRequest().permitAll();
+        requestMatchers("/h2-console/**").permitAll()
+                .and().headers().frameOptions().sameOrigin();
+        http.authorizeHttpRequests().anyRequest();
         return http.build();
     }
 }
