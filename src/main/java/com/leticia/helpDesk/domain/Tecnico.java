@@ -3,12 +3,15 @@ package com.leticia.helpDesk.domain;
 import com.leticia.helpDesk.domain.enums.Perfil;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import net.minidev.json.annotate.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Tecnico extends Pessoa {
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tecnico")
     private List<Chamado> chamados = new ArrayList<>();
 
