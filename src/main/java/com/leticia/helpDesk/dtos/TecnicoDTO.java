@@ -21,6 +21,10 @@ public class TecnicoDTO implements SecureRandomParameters {
     @JsonFormat(pattern = "dd/MM/yyyy" )
     protected LocalDate dataCriacao = LocalDate.now();
 
+    public TecnicoDTO() {
+        super();
+        addPerfil(Perfil.CLIENTE);
+    }
 
     public TecnicoDTO(Tecnico obj) {
         super();
