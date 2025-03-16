@@ -12,10 +12,15 @@ import java.time.LocalDateTime;
 public class ResourceExceptionHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class )
-    public ResponseEntity<StandarError> objectNotFoundException(ObjectNotFoundException ex,
-     HttpServletRequest request) {
+    public ResponseEntity<StandarError> objectNotFoundException(ObjectNotFoundException ex, HttpServletRequest request) {
      StandarError error = new StandarError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "Object Not found", ex.getMessage(), request.getRequestURI());
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class )
+    public ResponseEntity<StandarError> dataIntegrityViolationException(DataIntegrityViolationException ex, HttpServletRequest request) {
+        StandarError error = new StandarError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "violação de dados", ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
 }
