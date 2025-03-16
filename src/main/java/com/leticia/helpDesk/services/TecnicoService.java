@@ -1,6 +1,7 @@
 package com.leticia.helpDesk.services;
 
 import com.leticia.helpDesk.domain.Tecnico;
+import com.leticia.helpDesk.exception.ObjectNotFoundException;
 import com.leticia.helpDesk.repositories.TecnicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,6 @@ public class TecnicoService {
 
         public Tecnico findById(Integer id) {
                 Optional<Tecnico> obj = tecnicoRepository.findById(id);
-                return obj.orElse(null);
+                return obj.orElseThrow(()-> new ObjectNotFoundException("OBJETO NÃO ENCONTRADO COM ID: " + id));
         }
 }
