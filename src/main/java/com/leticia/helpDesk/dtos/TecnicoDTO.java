@@ -3,7 +3,6 @@ package com.leticia.helpDesk.dtos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.leticia.helpDesk.domain.Tecnico;
 import com.leticia.helpDesk.domain.enums.Perfil;
-
 import java.security.SecureRandomParameters;
 import java.time.LocalDate;
 import java.util.HashSet;

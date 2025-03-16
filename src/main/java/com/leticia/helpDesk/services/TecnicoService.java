@@ -1,11 +1,11 @@
 package com.leticia.helpDesk.services;
 
 import com.leticia.helpDesk.domain.Tecnico;
+import com.leticia.helpDesk.dtos.TecnicoDTO;
 import com.leticia.helpDesk.exception.ObjectNotFoundException;
 import com.leticia.helpDesk.repositories.TecnicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -22,5 +22,11 @@ public class TecnicoService {
 
         public List<Tecnico> findAll() {
                 return tecnicoRepository.findAll();
+        }
+
+        public Tecnico create(TecnicoDTO objDTO) {
+                objDTO.setId(null);
+                        Tecnico newObj = new Tecnico(objDTO);
+                        return tecnicoRepository.save(newObj);
         }
 }
