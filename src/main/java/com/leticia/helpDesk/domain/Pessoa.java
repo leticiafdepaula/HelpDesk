@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public abstract class Pessoa implements Serializable {
     protected Set<Integer> perfis =  new HashSet<>();
 
     @JsonFormat(pattern = "dd/mm/yyyy")
-    protected LocalDate dataCriacao = LocalDate.now();
+    protected LocalDateTime dataCriacao = LocalDateTime.now();
 
     public Pessoa() {
         super();
@@ -95,12 +96,12 @@ public abstract class Pessoa implements Serializable {
         this.perfis.add(perfil.getCodigo());
     }
 
-    public LocalDate getDataCriacao() {
+    public LocalDateTime getDataCriacao() {
         return dataCriacao;
     }
 
     public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = dataCriacao;
+        this.dataCriacao = LocalDateTime.from(dataCriacao);
     }
 
 

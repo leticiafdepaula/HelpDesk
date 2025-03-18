@@ -5,6 +5,9 @@ import com.leticia.helpDesk.dtos.TecnicoDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import net.minidev.json.annotate.JsonIgnore;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +36,8 @@ public class Tecnico extends Pessoa {
         this.email = obj.getEmail();
         this.senha = obj.getSenha();
         this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
-        this.dataCriacao = obj.getDataCriacao();
+        this.dataCriacao = (obj.getDataCriacao() != null) ? obj.getDataCriacao() : LocalDateTime.now();
+
     }
 
 

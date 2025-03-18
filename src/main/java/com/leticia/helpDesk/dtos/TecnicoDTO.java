@@ -1,10 +1,12 @@
 package com.leticia.helpDesk.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.leticia.helpDesk.domain.Tecnico;
 import com.leticia.helpDesk.domain.enums.Perfil;
+import jakarta.validation.constraints.NotNull;
 import java.security.SecureRandomParameters;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,13 +15,24 @@ public class TecnicoDTO implements SecureRandomParameters {
     private static final long serialVersionUID = 1L;
 
     protected Integer id;
+
+    @NotNull(message = " O campo NOME é requerido")
     protected String nome;
+
+    @NotNull(message = " O campo CPF é requerido")
     protected String cpf;
+
+    @NotNull(message = " O campo EMAIL é requerido")
     protected String email;
+
+    @NotNull(message = " O campo SENHA é requerido")
     protected String senha;
+
     protected Set<Integer> perfis =  new HashSet<>();
-    @JsonFormat(pattern = "dd/MM/yyyy" )
-    protected LocalDate dataCriacao = LocalDate.now();
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonProperty("dataCriacao")
+    protected LocalDateTime dataCriacao = LocalDateTime.now();
 
     public TecnicoDTO() {
         super();
@@ -34,7 +47,7 @@ public class TecnicoDTO implements SecureRandomParameters {
         this.email = obj.getEmail();
         this.senha = obj.getSenha();
         this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
-        this.dataCriacao = obj.getDataCriacao();
+        this.dataCriacao = (obj.getDataCriacao() != null) ? obj.getDataCriacao() : LocalDateTime.now();
     }
 
     public Integer getId() {
@@ -85,11 +98,11 @@ public class TecnicoDTO implements SecureRandomParameters {
         this.perfis.add(perfil.getCodigo());
     }
 
-    public LocalDate getDataCriacao() {
+    public LocalDateTime getDataCriacao() {
         return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 }

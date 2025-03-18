@@ -4,6 +4,7 @@ import com.leticia.helpDesk.domain.Tecnico;
 import com.leticia.helpDesk.dtos.TecnicoDTO;
 import com.leticia.helpDesk.services.TecnicoService;
 import jakarta.servlet.ServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class TecnicoResource {
         return ResponseEntity.ok().body(listdtos);
     }
     @PostMapping
-    public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoDTO tecnicoDTO, ServletRequest servletRequest) {
+    public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody  TecnicoDTO tecnicoDTO) {
             Tecnico newObj = tecnicoService.create(tecnicoDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
             return ResponseEntity.created(uri).build();
