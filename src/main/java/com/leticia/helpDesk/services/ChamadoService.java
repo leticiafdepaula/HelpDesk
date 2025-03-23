@@ -8,10 +8,11 @@ import com.leticia.helpDesk.domain.enums.Status;
 import com.leticia.helpDesk.dtos.ChamadoDTO;
 import com.leticia.helpDesk.exception.ObjectNotFoundException;
 import com.leticia.helpDesk.repositories.ChamadoRepository;
-import com.leticia.helpDesk.repositories.ClienteRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,13 @@ public class ChamadoService {
        return chamadoRepository.save(newChamado(objDTO));
     }
 
+    public Chamado update(Integer id, @Valid ChamadoDTO objDTO) {
+        objDTO.setId(id);
+        Chamado oldObj = findById(id);
+        oldObj = newChamado(objDTO);
+        return chamadoRepository.save(oldObj);
+    }
+
     private Chamado newChamado(ChamadoDTO objDTO) {
         Tecnico tecnico = tecnicoService.findById(objDTO.getTecnico());
         Cliente cliente = clienteService.findById(objDTO.getCliente());
@@ -45,6 +53,12 @@ public class ChamadoService {
         if(objDTO.getId() != null) {
             chamado.setId(objDTO.getId());
         }
+
+        if(objDTO.getStatus().equals(2)) {
+            chamado.setDataFechamento(LocalDate.now());
+
+        }
+
         chamado.setTecnico(tecnico);
         chamado.setCliente(cliente);
         chamado.setPrioridade(Prioridade.toEnum(objDTO.getPrioridade()));
@@ -53,4 +67,6 @@ public class ChamadoService {
         chamado.setObservacoes(objDTO.getObservacoes());
         return chamado;
     }
+
+
 }
