@@ -19,24 +19,24 @@ import java.util.Optional;
 @Service
 public class ChamadoService {
 
-       @Autowired
-       private ChamadoRepository chamadoRepository;
-       @Autowired
-       private TecnicoService tecnicoService;
-       @Autowired
-       private ClienteService clienteService;
+    @Autowired
+    private ChamadoRepository chamadoRepository;
+    @Autowired
+    private TecnicoService tecnicoService;
+    @Autowired
+    private ClienteService clienteService;
 
-       public Chamado findById(Integer id) {
-           Optional<Chamado> obj = chamadoRepository.findById(id);
-           return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado com o ID: " + id));
-       }
+    public Chamado findById(Integer id) {
+        Optional<Chamado> obj = chamadoRepository.findById(id);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado com o ID: " + id));
+    }
 
     public List<Chamado> findAll() {
         return chamadoRepository.findAll();
     }
 
     public Chamado create(@Valid  ChamadoDTO objDTO) {
-       return chamadoRepository.save(newChamado(objDTO));
+        return chamadoRepository.save(newChamado(objDTO));
     }
 
     public Chamado update(Integer id, @Valid ChamadoDTO objDTO) {
@@ -49,6 +49,7 @@ public class ChamadoService {
     private Chamado newChamado(ChamadoDTO objDTO) {
         Tecnico tecnico = tecnicoService.findById(objDTO.getTecnico());
         Cliente cliente = clienteService.findById(objDTO.getCliente());
+
         Chamado chamado = new Chamado();
         if(objDTO.getId() != null) {
             chamado.setId(objDTO.getId());
