@@ -8,6 +8,7 @@ import com.leticia.helpDesk.exception.ObjectNotFoundException;
 import com.leticia.helpDesk.repositories.PessoaRepository;
 import com.leticia.helpDesk.repositories.TecnicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,8 @@ public class TecnicoService {
         private TecnicoRepository tecnicoRepository;
         @Autowired
         private PessoaRepository pessoaRepository;
+        @Autowired
+        private BCryptPasswordEncoder bcryptPasswordEncoder;
 
         public Tecnico findById(Integer id) {
                 Optional<Tecnico> obj = tecnicoRepository.findById(id);
@@ -31,6 +34,7 @@ public class TecnicoService {
 
         public Tecnico create(TecnicoDTO objDTO) {
                 objDTO.setId(null);
+                objDTO.setSenha(bcryptPasswordEncoder.encode(objDTO.getSenha()));
                 validaPorCpfEEmail(objDTO);
                 Tecnico newObj = new Tecnico(objDTO);
                 return tecnicoRepository.save(newObj);

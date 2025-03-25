@@ -8,6 +8,7 @@ import com.leticia.helpDesk.exception.ObjectNotFoundException;
 import com.leticia.helpDesk.repositories.ClienteRepository;
 import com.leticia.helpDesk.repositories.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class ClienteService {
         private ClienteRepository clienteRepository;
         @Autowired
         private PessoaRepository pessoaRepository;
+    @Autowired
+    private BCryptPasswordEncoder bcryptPasswordEncoder;
 
         public Cliente findById(Integer id) {
                 Optional<Cliente> obj = clienteRepository.findById(id);
@@ -32,6 +35,7 @@ public class ClienteService {
 
         public Cliente create(ClienteDTO objDTO) {
                 objDTO.setId(null);
+                objDTO.setSenha(bcryptPasswordEncoder.encode(objDTO.getSenha()));
                 validaPorCpfEEmail(objDTO);
                 Cliente newObj = new Cliente(objDTO);
                 return clienteRepository.save(newObj);
