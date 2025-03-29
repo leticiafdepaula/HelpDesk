@@ -10,24 +10,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class JWTAuthenticatorFilter extends UsernamePasswordAuthenticationFilter {
+public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
-    private JWTUtil jwtUtils;
+    private JWTUtil jwtUtil;
 
-    public JWTAuthenticatorFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtils, UserDetailsService userDetailsService) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
         super(authenticationManager);
         this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException { //caso de tentativa de autenticação
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             CredenciaisDTO creds = new ObjectMapper().readValue(request.getInputStream(), CredenciaisDTO.class);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getSenha(), new ArrayList<>());
@@ -42,8 +41,8 @@ public class JWTAuthenticatorFilter extends UsernamePasswordAuthenticationFilter
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
             throws IOException, ServletException {
             String username = ((User) authResult.getPrincipal()).getUsername();
-            String token = jwtUtils.generateToken(username);
-            response.setHeader("acces-control-expose-headers","Authorization");
+          String token = jwtUtil.generateToken(username);
+            response.setHeader("access-control-expose-headers","Authorization");
             response.setHeader("Authorization", "Bearer" + token);
     }
 
