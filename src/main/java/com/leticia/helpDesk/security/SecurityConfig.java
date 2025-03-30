@@ -9,10 +9,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 
 @EnableWebSecurity
 @Configuration
@@ -25,12 +27,17 @@ public class SecurityConfig  {
     @Autowired
     private JWTUtil jwtUtil;
 
+    @Autowired
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         log.info("Configuração de segurança carregada!");
 
         return http
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable())  // CSRF desativado para a H2 Console
+                .cors(AbstractHttpConfigurer::disable)
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // API sem estado
                 .authorizeRequests(req -> req
                         .requestMatchers("/auth/**", "/h2-console/**").permitAll()  // Permite acessos públicos
@@ -51,6 +58,11 @@ public class SecurityConfig  {
                 .passwordEncoder(bcryptPasswordEncoder()); // Corrigido para usar o método @Bean
 
         return authenticationManagerBuilder.build();  // Retorna o AuthenticationManager
+    }
+
+    @Bean
+    public JwtAuthenticationEntryPoint unauthorizedHandler() {
+        return new JwtAuthenticationEntryPoint();
     }
 
     @Bean
