@@ -23,6 +23,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         super(authenticationManager);
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        setFilterProcessesUrl("/login");
+
     }
 
     @Override
@@ -43,7 +45,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             String username = ((User) authResult.getPrincipal()).getUsername();
           String token = jwtUtil.generateToken(username);
             response.setHeader("access-control-expose-headers","Authorization");
-            response.setHeader("Authorization", "Bearer" + token);
+            response.setHeader("Authorization", "Bearer " + token);
     }
 
     @Override
