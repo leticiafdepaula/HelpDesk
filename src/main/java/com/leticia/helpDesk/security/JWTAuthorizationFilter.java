@@ -20,7 +20,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserDetailsService userDetailsService) {
         super(authenticationManager);
-        this.jwtUtil = new JWTUtil();
+        this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
 
@@ -29,26 +29,50 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             throws IOException, ServletException {
         String header = request.getHeader("Authorization");
 
-        // Verifica se o header é válido
-        if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7).trim(); // Garante que remove espaços extras
-            if (!token.isEmpty()) { // Evita erro caso o token seja apenas "Bearer "
-                UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(token);
-                if (authenticationToken != null) {
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                }
-            }
+        if (header == null || !header.startsWith("Bearer ")) {
+            System.out.println("Nenhum token JWT encontrado.");
+            chain.doFilter(request, response);
+            return;
+        }
+
+        String token = header.substring(7).trim();
+        System.out.println("🔍 Token recebido: " + token);
+
+        if (token.isEmpty()) {
+            System.out.println("Token vazio ou inválido.");
+            chain.doFilter(request, response);
+            return;
+        }
+
+        UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(token);
+
+        if (authenticationToken != null) {
+            System.out.println("Usuário autenticado: " + authenticationToken.getName());
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        } else {
+            System.out.println("Token inválido. Nenhuma autenticação foi realizada.");
         }
 
         chain.doFilter(request, response);
     }
 
+
+
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        if(jwtUtil.tokenVaido(token)) {
+        System.out.println("Validando token...");
+
+        if (jwtUtil.tokenValido(token)) {
             String username = jwtUtil.getUsername(token);
-            UserDetails details = userDetailsService.loadUserByUsername(username);
-            return new UsernamePasswordAuthenticationToken(details.getUsername(), null, details.getAuthorities());
+            System.out.println("Token válido. Usuário extraído: " + username);
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            System.out.println(" Usuário encontrado: " + userDetails.getUsername());
+
+            return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         }
+
+
+        System.out.println(" Token inválido.");
         return null;
     }
 

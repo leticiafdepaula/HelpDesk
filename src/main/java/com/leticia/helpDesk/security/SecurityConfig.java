@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -43,23 +44,23 @@ public class SecurityConfig  {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable())  // CSRF desativado para o H2 Console
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // API sem estado
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/auth/**", "/h2-console/**", "/login").permitAll()// Permite acessos públicos
-                        .anyRequest().authenticated())  // Exige autenticação para outras rotas
-                .authenticationProvider(authenticationProvider())  // Usa o Authentication Provider
-                .addFilter(new JWTAuthenticationFilter(authenticationManager, jwtUtil)) // Adiciona filtro de autenticação
-                .addFilter(new JWTAuthorizationFilter(authenticationManager, jwtUtil, userDetailsService)) // Adiciona filtro de autorização
-                .headers(headers -> headers.frameOptions().disable())  // Permite o console do H2
+                        .requestMatchers("/auth/**", "/h2-console/**", "/login").permitAll()
+                        .anyRequest().authenticated())
+                .authenticationProvider(authenticationProvider())
+                .addFilter(new JWTAuthenticationFilter(authenticationManager, jwtUtil))
+                .addFilterBefore(new JWTAuthorizationFilter(authenticationManager, jwtUtil, userDetailsService),
+                        UsernamePasswordAuthenticationFilter.class)
+                .headers(headers -> headers.frameOptions().disable())
                 .build();
     }
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // Ajuste conforme necessário
+        configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization"));

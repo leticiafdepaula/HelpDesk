@@ -27,11 +27,11 @@ public class Chamado implements Serializable {
     private String titulo;
     private String observacoes;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 

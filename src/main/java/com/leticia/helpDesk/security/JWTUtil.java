@@ -30,7 +30,7 @@ public class JWTUtil {
 
     }
 
-    public boolean tokenVaido(String token) {
+    public boolean tokenValido(String token) {
         Claims claims = getClaims(token);
         if (claims != null) {
             String username = claims.getSubject();
