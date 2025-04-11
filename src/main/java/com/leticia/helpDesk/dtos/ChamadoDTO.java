@@ -48,7 +48,6 @@ public class ChamadoDTO implements Serializable {
         this.nomeTecnico = obj.getTecnico().getNome();
     }
 
-
     public Integer getId() {
         return id;
     }
@@ -136,6 +135,7 @@ public class ChamadoDTO implements Serializable {
     public void setNomeCliente(String nomeCliente) {
         this.nomeCliente = nomeCliente;
     }
+
 }
 
 

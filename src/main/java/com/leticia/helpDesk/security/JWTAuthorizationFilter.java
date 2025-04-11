@@ -36,7 +36,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         String token = header.substring(7).trim();
-        System.out.println("🔍 Token recebido: " + token);
+        System.out.println(" Token recebido: " + token);
 
         if (token.isEmpty()) {
             System.out.println("Token vazio ou inválido.");
@@ -75,6 +75,5 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         System.out.println(" Token inválido.");
         return null;
     }
-
 
 }

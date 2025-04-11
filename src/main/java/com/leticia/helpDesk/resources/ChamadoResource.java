@@ -32,6 +32,7 @@ public class ChamadoResource {
     }
     @PostMapping
     public ResponseEntity<ChamadoDTO> create(@Valid @RequestBody ChamadoDTO objDTO) {
+        System.out.println("JSON recebido: " + objDTO);
         Chamado obj = service.create(objDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).body(new ChamadoDTO(obj));

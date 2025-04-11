@@ -1,6 +1,7 @@
 package com.leticia.helpDesk.services;
 
 import com.leticia.helpDesk.domain.Chamado;
+import com.leticia.helpDesk.domain.Cliente;
 import com.leticia.helpDesk.domain.Tecnico;
 import com.leticia.helpDesk.domain.enums.Prioridade;
 import com.leticia.helpDesk.domain.enums.Status;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @Service
@@ -35,20 +38,81 @@ public class DBServices {
         Tecnico tec4 = new Tecnico(null, "Tim Berners-Lee", "162.720.120-39", "lee@mail.com", encoder.encode(senha));
         Tecnico tec5 = new Tecnico(null, "Linus Torvalds", "778.556.170-27", "linus@mail.com", encoder.encode(senha));
 
-        Tecnico cli1 = new Tecnico(null, "Albert Einstein", "111.661.890-74", "einstein@mail.com", encoder.encode(senha));
-        Tecnico cli2 = new Tecnico(null, "Marie Curie", "322.429.140-06", "curie@mail.com", encoder.encode(senha));
-        Tecnico cli3 = new Tecnico(null, "Charles Darwin", "792.043.830-62", "darwin@mail.com", encoder.encode(senha));
-        Tecnico cli4 = new Tecnico(null, "Stephen Hawking", "177.409.680-30", "hawking@mail.com", encoder.encode(senha));
-        Tecnico cli5 = new Tecnico(null, "Max Planck", "081.399.300-83", "planck@mail.com", encoder.encode(senha));
+        Cliente cli1 = new Cliente(null, encoder.encode(senha), "einstein@mail.com", "111.661.890-74", "Albert Einstein");
+        Cliente cli2 = new Cliente(null, encoder.encode(senha), "curie@mail.com", "322.429.140-06", "Marie Curie");
+        Cliente cli3 = new Cliente(null, encoder.encode(senha), "darwin@mail.com", "792.043.830-62", "Charles Darwin");
+        Cliente cli4 = new Cliente(null, encoder.encode(senha), "hawking@mail.com", "177.409.680-30", "Stephen Hawking");
+        Cliente cli5 = new Cliente(null, encoder.encode(senha), "planck@mail.com", "081.399.300-83", "Max Planck");
 
-        Chamado c1 = new Chamado(null, Prioridade.MEDIA, Status.ANDAMENTO, "Chamado 1", "Teste chamado 1", tec1, cli1);
-        Chamado c2 = new Chamado(null, Prioridade.ALTA, Status.ABERTO, "Chamado 2", "Teste chamado 2", tec1, cli2);
-        Chamado c3 = new Chamado(null, Prioridade.BAIXA, Status.ENCERRADO, "Chamado 3", "Teste chamado 3", tec2, cli3);
-        Chamado c4 = new Chamado(null, Prioridade.ALTA, Status.ABERTO, "Chamado 4", "Teste chamado 4", tec3, cli3);
-        Chamado c5 = new Chamado(null, Prioridade.MEDIA, Status.ANDAMENTO, "Chamado 5", "Teste chamado 5", tec2, cli1);
-        Chamado c6 = new Chamado(null, Prioridade.BAIXA, Status.ENCERRADO, "Chamado 7", "Teste chamado 6", tec1, cli5);
 
-        pessoaRepository.saveAll(Arrays.asList(tec1, tec2, tec3, tec4, tec5, cli1, cli2, cli3, cli4, cli5));
-        chamadoRepository.saveAll(Arrays.asList(c1, c2, c3, c4, c5, c6));
-    }
+        Chamado c1 = Chamado.builder()
+                .id(null)
+                .prioridade(Prioridade.MEDIA)
+                .status(Status.ANDAMENTO)
+                .titulo("Chamado 1")
+                .dataAbertura(LocalDate.now())
+                .observacoes("TESTE1")
+                .tecnico(tec1)
+                .cliente(cli2)
+                .build();
+
+        Chamado c2 = Chamado.builder()
+                .id(null)
+                .prioridade(Prioridade.ALTA)
+                .status(Status.ABERTO)
+                .titulo("Chamado 2")
+                .dataAbertura(LocalDate.now())
+                .observacoes("TESTE2 ")
+                .tecnico(tec2)
+                .cliente(cli3)
+                .build();
+
+
+        Chamado c3 = Chamado.builder()
+                .id(null)
+                .prioridade(Prioridade.BAIXA)
+                .status(Status.ENCERRADO)
+                .titulo("Chamado 3")
+                .dataAbertura(LocalDate.now())
+                .observacoes("TESTE3 ")
+                .tecnico(tec2)
+                .cliente(cli3)
+                .build();
+
+        Chamado c4 = Chamado.builder()
+                .id(null)
+                .prioridade(Prioridade.ALTA)
+                .status(Status.ABERTO)
+                .titulo("Chamado 4")
+                .dataAbertura(LocalDate.now())
+                .observacoes("TESTE4 ")
+                .tecnico(tec2)
+                .cliente(cli3)
+                .build();
+
+        Chamado c5 = Chamado.builder()
+                .id(null)
+                .prioridade(Prioridade.MEDIA)
+                .status(Status.ANDAMENTO)
+                .titulo("Chamado 5")
+                .dataAbertura(LocalDate.now())
+                .observacoes("TESTE5 ")
+                .tecnico(tec2)
+                .cliente(cli1)
+                .build();
+
+        Chamado c6 = Chamado.builder()
+                .id(null)
+                .prioridade(Prioridade.BAIXA)
+                .status(Status.ENCERRADO)
+                .titulo("Chamado 6")
+                .dataAbertura(LocalDate.now())
+                .observacoes("TESTE6 ")
+                .tecnico(tec1)
+                .cliente(cli5)
+                .build();
+
+        pessoaRepository.saveAll(Arrays.asList(tec1,tec2,tec3,tec4,tec5, cli1,cli2,cli3,cli4,cli5));
+        chamadoRepository.saveAll(Arrays.asList(c1,c2,c3,c4,c5,c6));
+}
 }
